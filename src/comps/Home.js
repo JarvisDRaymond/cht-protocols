@@ -3,15 +3,21 @@ import useFirestore from "../hooks/useFirestore";
 import { motion } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Title from "./Title";
-
-const Home = ({ setSelectedImg }) => {
+import Search from "./Search";
+const Home = ({
+  selectedImg,
+  setSelectedImg,
+  selectedImgTxt,
+  setSelectedImgTxt,
+  selectedImgTitle,
+  setSelectedImgTitle,
+}) => {
+  /*
   const { docs } = useFirestore("images");
   console.log(docs);
   return (
     <>
     <Title />
-
-
     <div className="img-grid">
       {docs &&
         docs.map((doc) => (
@@ -41,6 +47,20 @@ const Home = ({ setSelectedImg }) => {
         ))}
     </div>
 
+    </>
+  );
+  */
+  return (
+    <>
+      <Title />
+      <Search
+        selectedImg={selectedImg}
+        selectedImgTxt={selectedImgTxt}
+        setSelectedImg={setSelectedImg}
+        setSelectedImgTxt={setSelectedImgTxt}
+        selectedImgTitle={selectedImgTitle}
+        setSelectedImgTitle={setSelectedImgTitle}
+      />
     </>
   );
 };

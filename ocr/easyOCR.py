@@ -14,9 +14,15 @@ import numpy as np
 IMAGE_PATH = sys.argv[1];
 
 reader = easyocr.Reader(['en'])
-result = reader.readtext(IMAGE_PATH,paragraph="False")
+result = reader.readtext(IMAGE_PATH,paragraph="True")
 output = ''
+count = 0
+
 for x in result: 
-    output = output + (x[1]) +'\n\n'
+    if (count == 0):
+        output = output+'<h1>'+x[1]+'</h1>'
+        count = count + 1
+    else: 
+        output = output + (x[1]) +'<br /><br />'
 
 print(output)

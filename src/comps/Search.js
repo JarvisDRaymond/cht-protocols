@@ -2,9 +2,17 @@ import React, { useState, useEffect } from "react";
 import useFirestore from "../hooks/useFirestore";
 import { motion } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Link } from "react-router-dom";
 import Fuse from "fuse.js";
 
-const Search = ({ setSelectedImg }) => {
+const Search = ({
+  selectedImg,
+  setSelectedImg,
+  selectedImgTxt,
+  setSelectedImgTxt,
+  selectedImgTitle,
+  setSelectedImgTitle,
+}) => {
   const { docs } = useFirestore("images");
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
@@ -14,6 +22,7 @@ const Search = ({ setSelectedImg }) => {
     maxPatternLength: 100,
     ignoreLocation: true,
     includeScore: true,
+    threshold: 0.3,
     keys: [
       {
         name: "title",
@@ -32,12 +41,23 @@ const Search = ({ setSelectedImg }) => {
     setQuery(e.target.value);
   };
   useEffect(() => {
-    console.log(query);
-    const results = fuse.search(query);
-    const processedResults = results.map((obj) => obj.item);
-    setSearchResults(processedResults);
-    console.log("FUSE RESULTS:", results);
+    if (query =="") {
+      setSearchResults(docs);
+    }
+    else {
+      console.log(query);
+      const results = fuse.search(query);
+      const processedResults = results.map((obj) => obj.item);
+      setSearchResults(processedResults);
+      console.log("FUSE RESULTS:", results);
+  
+    }
   }, [query]);
+
+  useEffect(() => {
+      setSearchResults(docs);    
+  }, [docs]);
+
 
   return (
     <>
@@ -48,31 +68,41 @@ const Search = ({ setSelectedImg }) => {
       <div className="img-grid">
         {searchResults &&
           searchResults.map((doc) => (
-            <motion.div
-              key={doc.id}
-              layout
-              whileHover={{ scale: 1.02 }}
-              onClick={() => setSelectedImg(doc.url)}
-              className="img-wrap"
+            <Link
+              to="/page"
+              selectedImg={selectedImg}
+              selectedImgTxt={selectedImgTxt}
+              selectedImgTitle={selectedImgTitle}
             >
-              <LazyLoadImage
-                effect="opacity"
-                alt={doc.title}
-                src={doc.url}
-                placeholderSrc={
-                  process.env.PUBLIC_URL + "/default-placeholder.png"
-                }
-              />
-              <motion.p
-                className="image-title"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+              <motion.div
+                key={doc.id}
+                layout
+                whileHover={{ scale: 1.02 }}
+                onClick={() => {
+                  setSelectedImg(doc.url);
+                  setSelectedImgTxt(doc.text);
+                  setSelectedImgTitle(doc.title);
+                }}
+                className="img-wrap"
               >
-                {doc.title}
-                <br />
-                {doc.text}
-              </motion.p>
-            </motion.div>
+                <LazyLoadImage
+                  effect="opacity"
+                  alt={doc.title}
+                  src={doc.url}
+                  placeholderSrc={
+                    process.env.PUBLIC_URL + "/default-placeholder.png"
+                  }
+                />
+                <motion.p
+                  className="image-title"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  {doc.title}
+                  <br />
+                </motion.p>
+              </motion.div>
+            </Link>
           ))}
       </div>
     </>
