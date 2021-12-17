@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
+      <Router basename="/hand-protocols">
         <Navbar />
         <Routes>
           <Route
@@ -73,6 +73,11 @@ function App() {
       <UploadForm />
       <ImageGrid setSelectedImg={setSelectedImg} />
        */}
+
+      <footer>
+        <hr />
+        Jarvis Raymond © {new Date().getFullYear()}
+      </footer>
     </div>
   );
 }

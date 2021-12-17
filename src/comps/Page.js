@@ -53,12 +53,13 @@ const Page = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
   return (
     <>
       <h1>Page View: {selectedImgTitle}</h1>
-
-      <img
-        src={selectedImg}
-        style={{ width: "auto", "max-height": "700px" }}
-        alt="enlarged image"
-      />
+      <a href={selectedImg} target="_blank">
+        <img
+          src={selectedImg}
+          style={{ "max-width": "95%", "max-height": "700px" }}
+          alt="enlarged image"
+        />
+      </a>
       <p
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedImgTxt) }}
       ></p>
