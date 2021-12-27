@@ -57,14 +57,14 @@ const Page = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
       <a href={selectedImg} target="_blank">
         <img
           src={selectedImg}
-          style={{ "maxWidth": "95%", "maxHeight": "700px" }}
+          style={{ maxWidth: "95%", maxHeight: "700px" }}
           alt="enlarged image"
         />
       </a>
       <p
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedImgTxt) }}
       ></p>
-      <div style={{ "textAlign": "center" }}>
+      <div style={{ textAlign: "center" }}>
         <button
           onClick={() => {
             deletePage();
@@ -73,10 +73,10 @@ const Page = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
           Delete this page
         </button>
         <Link to="/Edit">
-     <button type="button">
-         Edit Page
-     </button>
- </Link>
+          <button style={{ marginLeft: "25px" }} type="button">
+            Edit Page
+          </button>
+        </Link>
       </div>
     </>
   );

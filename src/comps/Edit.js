@@ -35,7 +35,6 @@ const Edit = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
     }
   };
 
-
   const deleteDoc = (e) => {
     e.preventDefault();
     const fs = projectFirestore;
@@ -55,14 +54,16 @@ const Edit = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
               alert("Error removing document: ", error);
             });
         });
-        submitForm()
+      })
+      .then(() => {
+        addNewDoc();
       })
       .catch(function (error) {
         alert("Error getting documents: ", error);
       });
   };
 
-  const submitForm = () => {
+  const addNewDoc = () => {
     if (file && title && text) {
       setUpload(true);
     } else {
@@ -70,20 +71,18 @@ const Edit = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
         "Please try again. Select an image and add the image information."
       );
     }
-
-    
   };
   return (
     <form>
       <h1>EDIT</h1>
-      Enter the Image title:
+      Edit the Image title:
       <input
         className="title-input"
         type="text"
         value={title}
         onChange={titleUpdate}
       ></input>
-      Enter the Image text:
+      Edit the Image text:
       <br />
       <textarea
         className="text-input"
@@ -92,8 +91,8 @@ const Edit = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
       ></textarea>
       <br />
       <h3>Original Image</h3>
-      <img style={{width:"100px",height:"100px"}}src={selectedImg} />
-
+      <img style={{ width: "100px", height: "100px" }} src={selectedImg} />
+      <br />
       Browse to replace the image:
       <br />
       <input onChange={changeHandler} type="file"></input>
