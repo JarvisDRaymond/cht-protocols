@@ -26,15 +26,29 @@ function App() {
           <Route
             exact
             path="/"
-            element={<Home selectedImg={selectedImg}
-            selectedImgTxt={selectedImgTxt}
-            setSelectedImg={setSelectedImg}
-            setSelectedImgTxt={setSelectedImgTxt}
-            selectedImgTitle={selectedImgTitle}
-            setSelectedImgTitle={setSelectedImgTitle} />}
+            element={
+              <Home
+                selectedImg={selectedImg}
+                selectedImgTxt={selectedImgTxt}
+                setSelectedImg={setSelectedImg}
+                setSelectedImgTxt={setSelectedImgTxt}
+                selectedImgTitle={selectedImgTitle}
+                setSelectedImgTitle={setSelectedImgTitle}
+              />
+            }
           />
           <Route exact path="/Add" element={<Add />} />
-          <Route exact path="/Edit" element={<Edit />} />
+          <Route
+            exact
+            path="/Edit"
+            element={
+              <Edit
+                selectedImg={selectedImg}
+                selectedImgTxt={selectedImgTxt}
+                selectedImgTitle={selectedImgTitle}
+              />
+            }
+          />
           <Route
             exact
             path="/Page"

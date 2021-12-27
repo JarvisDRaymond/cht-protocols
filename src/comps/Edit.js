@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { projectFirestore } from "../firebase/config";
 import ProgressBar from "./ProgressBar";
 
-const Edit = () => {
-  const [file, setFile] = useState(null);
+const Edit = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
+  const navigate = useNavigate();
+  const [file, setFile] = useState(selectedImg);
   const [upload, setUpload] = useState(false);
   const [error, setError] = useState(null);
   const types = [
@@ -12,14 +15,13 @@ const Edit = () => {
     "image/bmp",
     "image/gif",
   ];
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [title, setTitle] = useState(selectedImgTitle);
+  const [text, setText] = useState(selectedImgTxt);
   const titleUpdate = (e) => {
     setTitle(e.target.value);
   };
   const textUpdate = (e) => {
     setText(e.target.value);
-    console.log(text);
   };
   const changeHandler = (e) => {
     console.log("changed");
@@ -32,15 +34,44 @@ const Edit = () => {
       setError("Please try again. Only upload image files.");
     }
   };
-  const submitForm = (e) => {
+
+
+  const deleteDoc = (e) => {
     e.preventDefault();
-    if (file && title) {
+    const fs = projectFirestore;
+    let collectionRef = fs.collection("images");
+    collectionRef
+      .where("url", "==", selectedImg)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          doc.ref
+            .delete()
+            .then(() => {
+              alert("Document successfully updated!");
+              navigate("/");
+            })
+            .catch(function (error) {
+              alert("Error removing document: ", error);
+            });
+        });
+        submitForm()
+      })
+      .catch(function (error) {
+        alert("Error getting documents: ", error);
+      });
+  };
+
+  const submitForm = () => {
+    if (file && title && text) {
       setUpload(true);
     } else {
       setError(
         "Please try again. Select an image and add the image information."
       );
     }
+
+    
   };
   return (
     <form>
@@ -60,11 +91,14 @@ const Edit = () => {
         onChange={textUpdate}
       ></textarea>
       <br />
-      Browse to upload an image:
+      <h3>Original Image</h3>
+      <img style={{width:"100px",height:"100px"}}src={selectedImg} />
+
+      Browse to replace the image:
       <br />
       <input onChange={changeHandler} type="file"></input>
       <div>{file && file.name}</div>
-      <button onClick={submitForm} type="submit">
+      <button onClick={deleteDoc} type="submit">
         Submit
       </button>
       <div className="output">

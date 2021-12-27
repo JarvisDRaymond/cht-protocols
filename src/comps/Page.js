@@ -1,5 +1,6 @@
 import React from "react";
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import { Link } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
@@ -56,14 +57,14 @@ const Page = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
       <a href={selectedImg} target="_blank">
         <img
           src={selectedImg}
-          style={{ "max-width": "95%", "max-height": "700px" }}
+          style={{ "maxWidth": "95%", "maxHeight": "700px" }}
           alt="enlarged image"
         />
       </a>
       <p
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedImgTxt) }}
       ></p>
-      <div style={{ "text-align": "center" }}>
+      <div style={{ "textAlign": "center" }}>
         <button
           onClick={() => {
             deletePage();
@@ -71,6 +72,11 @@ const Page = ({ selectedImg, selectedImgTxt, selectedImgTitle }) => {
         >
           Delete this page
         </button>
+        <Link to="/Edit">
+     <button type="button">
+         Edit Page
+     </button>
+ </Link>
       </div>
     </>
   );

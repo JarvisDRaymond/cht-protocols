@@ -12,22 +12,35 @@ const useStorage = (file, title, text) => {
 
     const collectionRef = projectFirestore.collection('images');
 
-    storageRef.put(file).on(
-      "state_changed",
-      (snap) => {
-        let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
-        setProgress(percentage);
-      },
-      (err) => {
-        setError(err);
-      },
-      async () => {
-        const url = await storageRef.getDownloadURL();
+    if (typeof file !== "string") {
+      storageRef.put(file).on(
+        "state_changed",
+        (snap) => {
+          let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+          setProgress(percentage);
+        },
+        (err) => {
+          setError(err);
+        },
+        async () => {
+          const url = await storageRef.getDownloadURL();
+          const createdAt = timestamp();
+          collectionRef.add({url, createdAt, title, text});
+          setUrl(url);
+        }
+      );  
+    }
+    else {
+      const updateDB = async () => {
+        const url = file;
         const createdAt = timestamp();
-        collectionRef.add({url, createdAt, title, text});
-        setUrl(url);
+          collectionRef.add({url, createdAt, title, text});
+          setUrl(url);
       }
-    );
+      updateDB();
+      setProgress(100);
+
+    }
   }, [file]);
 
   return { progress, url, error };
