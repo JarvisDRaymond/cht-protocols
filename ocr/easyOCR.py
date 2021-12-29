@@ -20,7 +20,7 @@ count = 0
 
 for x in result: 
     if (count == 0):
-        output = output+'<h1>'+x[1]+'</h1>'
+        output = output+'<h1>'+x[1]+'</h1>\n'
         count = count + 1
     else: 
         output = output + (x[1]) +'<br /><br />'
